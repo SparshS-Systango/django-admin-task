@@ -11,12 +11,14 @@ from my_project.my_app import models
 from my_project.my_app.mappings import *
 
 
+
+
 class PricingPlanForm(forms.ModelForm):
     company = forms.ModelChoiceField(
         queryset=models.Company.objects.all(),
         required=True
     )
-    product_name = forms.ChoiceField(choices=PRODUCT_NAMES)
+    product_name = forms.ChoiceField(choices=PRODUCT_NAMES_DICT.items())
     fee = forms.IntegerField(required=True)
     status = forms.ChoiceField(choices=PRICING_PLAN_STATUSES)
     scope = forms.CharField(max_length=50, required=False)
@@ -100,6 +102,16 @@ class PricingPlanInline(admin.TabularInline):
         return super().get_queryset(request).filter(status='open')
 
 
+class CustomModelChoiceField(forms.ModelChoiceField):
+
+    def label_from_instance(self, obj):
+        """
+        Get label from product name mappings
+        """
+        mapping_dict = dict((key, value) for key, value in PRODUCT_NAMES)
+        return mapping_dict[obj.product_name]
+
+
 class PricingPlanInlineForVendor(PricingPlanInline):
 
     class Media:
@@ -113,7 +125,7 @@ class PricingPlanInlineForVendor(PricingPlanInline):
         formset.form.base_fields['status'].initial = 'open'
         qs = models.VendorPricingPlan.objects.all()
         qs = qs.filter(vendor=models.Vendor.objects.get(user_profiles=request.user.profile))
-        formset.form.base_fields['product_name'] = forms.ModelChoiceField(
+        formset.form.base_fields['product_name'] = CustomModelChoiceField(
             queryset=qs,
             to_field_name='product_name',
             required=True

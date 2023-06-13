@@ -26,6 +26,22 @@ PRODUCT_NAMES = (
     ('subscription_other', 'Abonnement'),
 )
 
+PRODUCT_NAMES_DICT =  {
+    'subscription_yavin': 'subscription_yavin',
+    'renting_yavin': 'renting_yavin',
+    'commission_proxi': 'commission_proxi',
+    'commission_vads': 'commission_vads',
+    "icpp_proxi": "icpp_proxi",
+    "icpp_vads": "icpp_vads",
+    'gateway_proxi': 'gateway_proxi',
+    'gateway_vads': 'gateway_vads',
+    'chargeback': 'chargeback',
+    'reimburse_unused_subscription': 'reimburse_unused_subscription',
+    'sms': 'sms',
+    'subscription_other': 'subscription_other',
+}
+
+
 PRODUCT_NAME_TO_SHORT = {
     'commission_proxi': 'c-prox',
     'commission_vads': 'c-vads',
